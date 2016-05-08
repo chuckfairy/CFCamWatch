@@ -8,12 +8,11 @@
  */
 "use strict";
 
+var Utils = require( __dirname + "/utils/Utils.js" );
+
 var CHILD_PROCESS = require('child_process');
 
 var EXEC = CHILD_PROCESS.exec;
-
-var Utils = require( "utils/Utils.js" );
-
 
 
 //Main class
@@ -62,9 +61,10 @@ FSWebcam.prototype = {
             ? "-D " + scope.opts.delay
             : "";
 
-        var sh = scope.opts.bin + " "
+        var sh = scope.bin + " "
             + resolution + " "
             + output + " "
+            + quality + " "
             + delay + " "
             + location;
 
@@ -76,21 +76,38 @@ FSWebcam.prototype = {
     /**
      * Capture shot
      *
+     *
      * @param String location
      * @param Function callback
      *
      */
     capture: function( location, callback ) {
 
+        var scope = this;
+
+        var fileType = FSWebcam.OutputTypes[ scope.opts.output ];
+
+        location = location + "." + fileType;
+
         var sh = scope.generateSh( location );
 
         console.log( sh );
 
-        return;
+        EXEC( sh, function( err, out, derr ) {
 
-        EXEC( sh, function( response ) {
+            if( err ) {
 
-            console.log( response );
+                console.log( derr );
+
+                throw err;
+
+            }
+
+            if( scope.opts.verbose && out ) {
+
+                console.log( out );
+
+            }
 
             callback && callback();
 
@@ -107,14 +124,29 @@ FSWebcam.Defaults = {
 
     banner: false,
 
-    width: 640,
+    width: 1280,
 
-    height: 480,
+    height: 720,
 
     delay: 0,
 
     quality: 100,
 
-    output: "jpeg"
+    output: "jpeg",
+
+    verbose: true
 
 };
+
+
+//Output types
+
+FSWebcam.OutputTypes = {
+
+    "jpeg": "jpg",
+
+    "png": "png"
+
+};
+
+module.exports = FSWebcam;

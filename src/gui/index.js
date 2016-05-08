@@ -3,7 +3,7 @@
  *
  * @requires [ CFCrack, os, http, node-static ]
  *
- * @param CFCamWatch Cam
+ * @param Watcher Watcher
  *
  * @param Object options
  *
@@ -19,12 +19,19 @@ var QueryString = require( "querystring" );
 
 //Main class
 
-function GUI( Cam, options ) {
+function GUI( Watcher, options ) {
 
     var scope = this;
 
     var options = typeof( options ) === "object" ? options : {};
 
-    scope.cam = ( Cracker ) ? Cracker : require( "../" );
+    scope.Watcher = Watcher ? Watcher : require( "../" );
 
 }
+
+GUI.prototype = {
+
+    constructor: GUI,
+
+
+};
