@@ -41,7 +41,7 @@ function GUI( Watch, options ) {
 
     scope.Watcher = Watch ? Watch : new Watcher();
 
-    scope.API.on( "connect", scope.setEvents );
+    scope.API.on( "connect", scope.setEvents.bind( scope ) );
 
 }
 
@@ -148,7 +148,10 @@ GUI.prototype = {
 
             if( err ) { throw err; }
 
-            var baseImage = new Buffer( data ).toString( "base64" );
+            var baseImage = "data:image/"
+                + scope.Watcher.FSWebcam.opts.output
+                + ";base64,"
+                + new Buffer( data ).toString( "base64" );
 
             scope.API.emit( "update", {
                 file: data.file,

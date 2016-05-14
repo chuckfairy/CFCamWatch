@@ -156,7 +156,7 @@ Watcher.Defaults = {
 
     name: "webcam_",
 
-    time: 5000,
+    time: 1000,
 
     autoStart: true,
 
