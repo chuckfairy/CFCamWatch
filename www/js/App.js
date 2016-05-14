@@ -55,6 +55,8 @@ CF.Watch.App.prototype = {
 
         scope.Connection.on( "update", function( data ) {
 
+            console.log( "Cam update" );
+
             scope.UI.update( data.base64 );
 
         });

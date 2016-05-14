@@ -41,7 +41,9 @@ function GUI( Watch, options ) {
 
     scope.Watcher = Watch ? Watch : new Watcher();
 
-    scope.API.on( "connect", scope.setEvents.bind( scope ) );
+    //scope.API.on( "connect", scope.setEvents.bind( scope ) );
+
+    scope.setEvents();
 
 }
 
@@ -153,7 +155,7 @@ GUI.prototype = {
                 + ";base64,"
                 + new Buffer( data ).toString( "base64" );
 
-            scope.API.emit( "update", {
+            scope.API.emitAll( "update", {
                 file: data.file,
                 base64: baseImage
             });

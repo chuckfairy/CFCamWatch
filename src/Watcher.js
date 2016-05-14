@@ -35,6 +35,12 @@ function Watcher( Cam, opts ) {
 
     }
 
+    if( scope.opts.autoDelete ) {
+
+        scope.setAutoDelete();
+
+    }
+
 }
 
 Watcher.prototype = {
@@ -139,6 +145,38 @@ Watcher.prototype = {
 
         });
 
+    },
+
+
+    //Set auto delete
+
+    setAutoDelete: function() {
+
+        console.log( "Auto delete enabled" );
+
+        var scope = this;
+
+        function autoDelete( code ) {
+
+            console.log( "Exit code given", code );
+            console.log( "Auto deleting images"  );
+
+            var wl = scope.watches.length;
+
+            for( var i = 0; i < wl; i ++ ) {
+
+                FS.unlinkSync( scope.watches[ i ] );
+
+            }
+
+            scope.watches = [];
+
+        }
+
+        process.on( "exit", autoDelete );
+
+        process.on( "SIGINT", autoDelete );
+
     }
 
 
@@ -156,11 +194,13 @@ Watcher.Defaults = {
 
     name: "webcam_",
 
-    time: 1000,
+    time: 0,
 
     autoStart: true,
 
     autoUpdate: true,
+
+    autoDelete: true,
 
     deleteAfter: 10,
 

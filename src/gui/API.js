@@ -4,6 +4,7 @@
  * @requires [ socket.io, GUI ]
  *
  */
+"use strict";
 
 var IO = require( "socket.io" );
 
@@ -19,6 +20,8 @@ function API( GUI, server ) {
 
     scope.server = server;
 
+    scope.sockets = [];
+
     scope.init();
 
 }
@@ -32,6 +35,8 @@ API.prototype = {
     io: null,
 
     socket: null,
+
+    sockets: [],
 
     opts: {},
 
@@ -63,21 +68,21 @@ API.prototype = {
 
         var scope = this;
 
-        scope.socket = socket;
+        scope.sockets.push( socket );
 
-        scope.socket.on( "error", function( data ) {
+        socket.on( "error", function( data ) {
 
             console.log( "[ERROR]", data );
 
         });
 
-        scope.socket.on( "start-update", function( data ) {
+        socket.on( "start-update", function( data ) {
 
             console.log( data );
 
         });
 
-        scope.socket.on( "get-info", function() {
+        socket.on( "get-info", function() {
 
             scope.emit( "info", Info );
 
@@ -88,11 +93,20 @@ API.prototype = {
 
     //Emit to client
 
-    emit: function( type, data ) {
+    emitAll: function( type, data ) {
 
-        console.log( "data request", type );
+        var scope = this;
 
-        this.socket.emit( type, data );
+        scope.io.emit( type, data );
+
+    },
+
+
+    //Emit to socket
+
+    emit: function( socket, type, data ) {
+
+        socket.emit( type, data );
 
     }
 
