@@ -7,13 +7,15 @@
 
 var IO = require( "socket.io" );
 
+var Info = require( __dirname + "/../Info.js" );
+
+var EventDispatcher = require( __dirname + "/../utils/EventDispatcher.js" );
+
 function API( GUI, server ) {
 
     var scope = this;
 
     scope.gui = GUI;
-
-    scope.Watcher = GUI.Watcher;
 
     scope.server = server;
 
@@ -38,16 +40,17 @@ API.prototype = {
 
     init: function() {
 
-        console.log( "Socket initalizing" );
-
         var scope = this;
 
         scope.io = IO( scope.server );
 
         scope.io.on( "connection", function( socket ) {
 
+            console.log( "Socket initalizing" );
+
             scope.setSocket( socket );
-            scope.setWifiEvents();
+
+            scope.dispatch( { type: "connect" } );
 
         });
 
@@ -68,85 +71,15 @@ API.prototype = {
 
         });
 
-        scope.socket.on( "command", function( data ) {
+        scope.socket.on( "start-update", function( data ) {
 
             console.log( data );
-
-            if( !typeof( data ) === "object" && !data.method ) {
-
-                scope.emit( "error", "Command sent does not have a type" );
-
-            }
-
-            console.log( "Data sent to command", data );
-
-            switch( data.method ) {
-
-                case "join":
-                    scope.gui.commands.join( data );
-                    break;
-
-                case "crack":
-                    scope.gui.commands.crack( data );
-                    break;
-
-                default:
-                    scope.emit( "error", "Command method not found " + data.method );
-                    break;
-
-            }
 
         });
 
         scope.socket.on( "get-info", function() {
 
-            var info = {
-                username: scope.gui.cracker.Username,
-                hostname: scope.gui.cracker.Hostname,
-                platform: scope.gui.cracker.OSPlatform,
-                architecture: scope.gui.cracker.OSArch,
-                freemem: scope.gui.cracker.OSFreeMemory,
-                versions: scope.gui.cracker.Versions
-            };
-
-            scope.emit( "info", info );
-
-        });
-
-        scope.socket.on( "get-networks", function() {
-
-            scope.emit( "networks", scope.gui.wifi.networks );
-
-        });
-
-    },
-
-
-    //Wifi api
-
-    setWifiEvents: function() {
-
-        var scope = this;
-
-        scope.wireless.on( "appear", function( data ) {
-
-            scope.emit( "message", "[NETWORK APPEARED] " + data.ssid );
-
-            scope.emit( "network-show", data );
-
-        });
-
-        scope.wireless.on( "vanish", function( data ) {
-
-            scope.emit( "message-error", "[NETWORK VANISHED] " + data.ssid + " " + data.address );
-
-            scope.emit( "network-leave", data );
-
-        });
-
-        scope.wireless.on( "join", function( data ) {
-
-            scope.emit( "network-join", data );
+            scope.emit( "info", Info );
 
         });
 
@@ -157,11 +90,17 @@ API.prototype = {
 
     emit: function( type, data ) {
 
-        console.log( "data request", type, data );
+        console.log( "data request", type );
+
         this.socket.emit( type, data );
 
     }
 
 };
+
+EventDispatcher.prototype.apply( API.prototype );
+
+
+//Export
 
 module.exports = API;

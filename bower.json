@@ -1,0 +1,31 @@
+{
+    "name": "cfwatch",
+    "description": "cf webcam security",
+    "main": "index.js",
+    "authors": [
+        "chuckfairy"
+    ],
+    "license": "MIT",
+    "keywords": [
+        "cam",
+        "web",
+        "watch"
+    ],
+    "homepage": "https://github.com/chuckfairy/CFCamWatch",
+    "moduleType": [
+        "node"
+    ],
+    "dependencies": {
+        "jquery": "*",
+        "bootstrap": "*"
+    },
+    "private": true,
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "www/js/plugin",
+        "test",
+        "tests"
+    ]
+}

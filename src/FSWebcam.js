@@ -109,7 +109,7 @@ FSWebcam.prototype = {
 
             }
 
-            callback && callback();
+            callback && callback( location );
 
         });
 

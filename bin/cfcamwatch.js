@@ -9,4 +9,4 @@
 
 var CF = require( "../CFCamWatch.js" );
 
-var Watcher = new CF.Watcher();
+var GUI = new CF.GUI();

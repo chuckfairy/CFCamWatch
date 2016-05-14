@@ -12,7 +12,9 @@
 
 var Watcher = require( __dirname + "/../Watcher.js" );
 
-var API = require( __dirname + "/../API.js" );
+var Utils = require( __dirname + "/../utils/Utils.js" );
+
+var API = require( __dirname + "/API.js" );
 
 var Http = require( "http" );
 
@@ -22,6 +24,8 @@ var Path = require( "path" );
 
 var QueryString = require( "querystring" );
 
+var FS = require( "fs" );
+
 
 //Main class
 
@@ -29,11 +33,15 @@ function GUI( Watch, options ) {
 
     var scope = this;
 
-    var options = typeof( options ) === "object" ? options : {};
+    scope.opts = Utils.setDefaults( options, GUI.Defaults );
+
+    scope.init();
+
+    scope.API = new API( scope, scope.server );
 
     scope.Watcher = Watch ? Watch : new Watcher();
 
-    scope.API = new API( scope, scope.server );
+    scope.API.on( "connect", scope.setEvents );
 
 }
 
@@ -121,21 +129,33 @@ GUI.prototype = {
     },
 
 
-    //Send special command to node
+    //Set watch events
 
-    command: function( data, callback ) {
+    setEvents: function() {
 
         var scope = this;
 
-        var command = scope.commands[ data.method ].bind( scope );
+        scope.Watcher.on( "update", scope.sendUpdate.bind( scope ) );
 
-        if( !command ) {
+    },
 
-            throw new Error( "Command not found " + data.method );
 
-        }
+    sendUpdate: function( data ) {
 
-        command( data, callback );
+        var scope = this;
+
+        FS.readFile( data.file, function( err, data ) {
+
+            if( err ) { throw err; }
+
+            var baseImage = new Buffer( data ).toString( "base64" );
+
+            scope.API.emit( "update", {
+                file: data.file,
+                base64: baseImage
+            });
+
+        });
 
     }
 

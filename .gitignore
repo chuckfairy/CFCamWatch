@@ -1,3 +1,4 @@
 .sw[po]
 cache
 www/plugin
+node_modules

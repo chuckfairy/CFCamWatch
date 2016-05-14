@@ -56,6 +56,8 @@ Watcher.prototype = {
 
     lastUpdateTime: Date.now(),
 
+    lastLocation: "",
+
 
     //Watched pictures
 
@@ -72,7 +74,11 @@ Watcher.prototype = {
             + scope.opts.name
             + Date.now();
 
-        scope.FSWebcam.capture( location, function() {
+        scope.lastLocation = location;
+
+        scope.FSWebcam.capture( location, function( fileLocale ) {
+
+            var location = fileLocale;
 
             scope.lastUpdateTime = Date.now();
 
