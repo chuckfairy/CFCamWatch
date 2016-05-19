@@ -14,7 +14,9 @@
       "async": "*",
       "node-static": "*",
       "socket.io": "*",
-      "cfdispatcher": "*"
+      "cfdispatcher": "*",
+      "node-zip": "*",
+      "moment": "*"
   },
   "author": "chuckfairy",
   "license": "MIT"
