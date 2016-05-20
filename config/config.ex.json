@@ -1,0 +1,43 @@
+{
+
+    "gui": {
+
+        "password": false
+
+    },
+
+    "watcher": {
+
+        "name": "webcam_",
+
+        "time": 0,
+
+        "autoStart": true,
+
+        "autoUpdate": true,
+
+        "autoDelete": true,
+
+        "deleteAfter": false,
+
+        "archiveAfter": 5,
+
+        "verbose": true,
+
+        "dir": "",
+
+        "zipDir": false,
+
+        "ftp": {
+            "enabled": false,
+            "host": "",
+            "port": 3333,
+            "username": "",
+            "password": "",
+            "debugMode": true,
+            "dir": ""
+        }
+
+    }
+
+}

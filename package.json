@@ -16,7 +16,8 @@
       "socket.io": "*",
       "cfdispatcher": "*",
       "node-zip": "*",
-      "moment": "*"
+      "moment": "*",
+      "jsftp": "*"
   },
   "author": "chuckfairy",
   "license": "MIT"

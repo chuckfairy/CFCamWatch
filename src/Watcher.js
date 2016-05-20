@@ -16,6 +16,8 @@ var NodeZip = require( "node-zip" );
 
 var Moment = require( "moment" );
 
+var JSFtp = require( "jsftp" );
+
 var FSWebcam = require( __dirname + "/FSWebcam.js" );
 
 var Utils = require( __dirname + "/utils/Utils.js" );
@@ -35,15 +37,32 @@ function Watcher( Cam, opts ) {
 
     scope.watches = [];
 
+    scope.archives = [];
+
+
+    //Auto start watching
+
     if( scope.opts.autoStart ) {
 
         scope.update();
 
     }
 
+
+    //Auto delete set after process quit
+
     if( scope.opts.autoDelete ) {
 
         scope.setAutoDelete();
+
+    }
+
+
+    //FTP connection start
+
+    if( scope.opts.ftp.enabled ) {
+
+        scope.setFTP();
 
     }
 
@@ -76,6 +95,13 @@ Watcher.prototype = {
     //Watched pictures
 
     watches: [],
+
+    archives: [],
+
+
+    //FTP
+
+    ftp: null,
 
 
     //Main update
@@ -196,6 +222,9 @@ Watcher.prototype = {
 
             }
 
+
+            //Generate and write locally
+
             var data = Zip.generate({
                 base64: false,
                 compression: "DEFLATE"
@@ -203,10 +232,21 @@ Watcher.prototype = {
 
             FS.writeFile( zipName, data, 'binary' );
 
+            scope.archives.push( zipName );
+
 
             //Rewrites
 
             scope.startUpdateTime = Date.now();
+
+
+            //FTP upload
+
+            if( !! scope.ftp ) {
+
+                scope.ftpUpload( Path.basename( zipName ), data );
+
+            }
 
         });
 
@@ -254,9 +294,17 @@ Watcher.prototype = {
 
             var wl = scope.watches.length;
 
+            var al = scope.archives.length;
+
             for( var i = 0; i < wl; i ++ ) {
 
                 FS.unlinkSync( scope.watches[ i ] );
+
+            }
+
+            for( var i = 0; i < al; i ++ ) {
+
+                FS.unlinkSync( scope.archives[ i ] );
 
             }
 
@@ -267,6 +315,45 @@ Watcher.prototype = {
         process.on( "exit", autoDelete );
 
         process.on( "SIGINT", autoDelete );
+
+    },
+
+
+    //Setup FTP
+
+    setupFTP: function() {
+
+        var scope = this;
+
+        scope.ftp = new JSFtp( scope.opts.ftp );
+
+    },
+
+
+    //ftp upload
+
+    ftpUpload: function( ftpFile, data, callback ) {
+
+        var scope = this;
+
+        scope.ftp.put( data, ftpData, function( err ) {
+
+            if( err ) { throw err; }
+
+            if( scope.opts.verbose ) {
+
+                console.log( "UPLOADED ARCHIVE TO FTP " + zipName );
+
+            }
+
+            scope.dispatch({
+                type: "ftp-upload",
+                file: ftpFile
+            });
+
+            callback && callback();
+
+        });
 
     }
 
@@ -301,7 +388,17 @@ Watcher.Defaults = {
 
     dir: Path.resolve( __dirname, "..", "cache" ) + "/",
 
-    zipDir: false
+    zipDir: false,
+
+    ftp: {
+        enabled: false,
+        host: "",
+        port: 3333,
+        username: "",
+        password: "",
+        debugMode: true,
+        dir: ""
+    }
 
 };
 
