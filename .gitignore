@@ -2,3 +2,4 @@
 cache
 www/plugin
 node_modules
+config/config.json

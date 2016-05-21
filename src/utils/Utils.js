@@ -2,7 +2,9 @@
  * js Utils
  *
  */
-module.exports = {
+var FS = require( "fs" );
+
+var Utils = {
 
     //Highly used as an inheritance
 
@@ -20,7 +22,7 @@ module.exports = {
 
             if( typeof( defaultVal ) === "object" ) {
 
-                object[ defaultName ] = SynQuiz.Utils.setDefaults( objectVal, defaultVal );
+                object[ defaultName ] = Utils.setDefaults( objectVal, defaultVal );
 
             } else if( typeof( objectVal ) === "undefined" ) {
 
@@ -32,6 +34,75 @@ module.exports = {
 
         return object;
 
+    },
+
+
+    //get JSON helper
+
+    getJSON: function( json ) {
+
+        var obj = {};
+
+        try {
+
+            obj = JSON.parse( json ) || {};
+
+        } catch( e ) {
+
+            console.log( "JSON file failed to parse" );
+
+        }
+
+        return obj;
+
+    },
+
+
+    //Get config file
+
+    getConfig: function( path, callback ) {
+
+        FS.readFile( path, function( err, data ) {
+
+            if( err ) { throw err; }
+
+            var json = Utils.getJSON( data );
+
+            callback && callback( json );
+
+        });
+
+    },
+
+
+
+    //File exists sync
+
+    fileExists: function( path ) {
+        try {
+
+            return fs.statSync( path ).isFile();
+
+        } catch( e ) {
+
+            return false;
+
+        }
+
+    },
+
+
+
+    //Copy file sync
+
+    copyFile: function( src, dest, encoding ) {
+
+        var content = FS.readFileSync( src, encoding );
+
+        FS.writeFileSync( dest, content, encoding );
+
     }
 
 };
+
+module.exports = Utils;

@@ -29,7 +29,7 @@ var FS = require( "fs" );
 
 //Main class
 
-function GUI( Watch, options ) {
+function GUI( options ) {
 
     var scope = this;
 
@@ -39,7 +39,7 @@ function GUI( Watch, options ) {
 
     scope.API = new API( scope, scope.server );
 
-    scope.Watcher = Watch ? Watch : new Watcher();
+    scope.Watcher = new Watcher( null, scope.opts.watcher );
 
     //scope.API.on( "connect", scope.setEvents.bind( scope ) );
 
