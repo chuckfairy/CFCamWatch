@@ -6,6 +6,14 @@
 
     },
 
+    "http": {
+
+        "port": 4200,
+
+        "verbose": true
+
+    },
+
     "watcher": {
 
         "name": "webcam_",

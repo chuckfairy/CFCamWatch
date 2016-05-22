@@ -1,0 +1,16 @@
+{
+
+    "type": "javascript",
+
+    "header": ";(function() {",
+
+    "footer": "})();",
+
+    "compile": [
+        "js/CFWatch.js",
+        "js/App.js",
+        "js/UI.js",
+        "js/COnnection.js"
+    ]
+
+}

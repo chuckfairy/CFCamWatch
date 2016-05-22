@@ -4,25 +4,6 @@
  * @requires [ CF.Watch.Connection ]
  *
  */
-"use strict";
-
-
-//Namespace
-
-var CF = CF || {};
-
-
-//Main Constants
-
-CF.Watch = {
-
-    REVISION: 1
-
-};
-
-
-//Main
-
 CF.Watch.App = function( options ) {
 
     var scope = this;

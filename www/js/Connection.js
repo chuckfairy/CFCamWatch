@@ -22,6 +22,8 @@ CF.Watch.Connection.prototype = {
 
     io: window.io,
 
+    loggedIn: false,
+
     opts: {},
 
     socket: null,
@@ -31,6 +33,8 @@ CF.Watch.Connection.prototype = {
         var scope = this;
 
         scope.socket = scope.io();
+
+        scope.socket.on( "infO", scope.setInfo.bind( scope ) );
 
         scope.socket.on( "message-error", scope.createDisplay( "error" ) );
 
@@ -52,6 +56,9 @@ CF.Watch.Connection.prototype = {
 
     },
 
+
+    //Socket funcs
+
     request: function( type, obj ) {
 
         this.socket.emit( type, obj );
@@ -61,6 +68,22 @@ CF.Watch.Connection.prototype = {
     on: function( type, callback ) {
 
         this.socket.on( type, callback );
+
+    },
+
+
+    //Set info
+
+    setInfo: function( data ) {
+
+
+    },
+
+
+    //Login
+
+    login: function( pass ) {
+
 
     }
 

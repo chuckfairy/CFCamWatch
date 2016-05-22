@@ -8,15 +8,17 @@
  */
 "use strict";
 
-var CF = require( "../CFCamWatch.js" );
+var CF = require( "../CFWatch.js" );
 
 var GUI;
 
 var FS = require( "fs" );
 
-var CONFIG_FILE = __dirname + "/../config/config.json";
+var Path = require( "path" );
 
-var CONFIG_FILE_EX = __dirname + "/../config/config.ex.json";
+var CONFIG_FILE = Path.resolve( __dirname, "..", "config/config.json" );
+
+var CONFIG_FILE_EX = Path.resolve( __dirname, "..", "config/config.ex.json" );
 
 
 //Check and setup config

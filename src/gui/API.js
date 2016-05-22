@@ -12,7 +12,10 @@ var Info = require( __dirname + "/../Info.js" );
 
 var EventDispatcher = require( __dirname + "/../utils/EventDispatcher.js" );
 
-function API( GUI, server ) {
+
+//Main Class
+
+function API( GUI, server, pass ) {
 
     var scope = this;
 

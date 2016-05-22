@@ -14,11 +14,9 @@ var Watcher = require( __dirname + "/../Watcher.js" );
 
 var Utils = require( __dirname + "/../utils/Utils.js" );
 
+var HTTPResponse = require( __dirname + "/HTTPResponse.js" );
+
 var API = require( __dirname + "/API.js" );
-
-var Http = require( "http" );
-
-var NodeStatic = require( "node-static" );
 
 var Path = require( "path" );
 
@@ -37,13 +35,29 @@ function GUI( options ) {
 
     scope.init();
 
-    scope.API = new API( scope, scope.server );
+
+    //Classes
+
+    scope.HTTP = new HTTPResponse( scope.opts.http );
+
+    scope.API = new API( scope, scope.HTTP.server );
 
     scope.Watcher = new Watcher( null, scope.opts.watcher );
+
+
 
     //scope.API.on( "connect", scope.setEvents.bind( scope ) );
 
     scope.setEvents();
+
+
+    //Set authenticate
+
+    if( scope.opts.gui.password ) {
+
+        scope.setAuthenication();
+
+    }
 
 }
 
@@ -52,20 +66,19 @@ GUI.prototype = {
     constructor: GUI,
 
 
+    //HTTP helper
+
+    HTTP: null,
+
+
+    //API
+
+    API: null,
+
+
     //Cam watcher
 
     Watcher: null,
-
-
-    //HTTP server
-
-    server: null,
-
-
-
-    //File server
-
-    fileServer: null,
 
 
     //Opts
@@ -75,60 +88,7 @@ GUI.prototype = {
 
     //Main
 
-    init: function() {
-
-        var scope = this;
-
-        scope.server = Http.createServer( scope.createServerResponse( scope.opts.location ) );
-        scope.server.listen( scope.opts.port );
-
-        scope.fileServer = new NodeStatic.Server( scope.opts.location );
-
-        console.log(
-            "Starting from location "
-            + scope.opts.location
-            + "\nPort "
-            + scope.opts.port
-        );
-
-    },
-
-
-    //Main http access get
-
-    createServerResponse: function( location ) {
-
-        var scope = this;
-
-        var serve = function( request, response ) {
-
-            scope.fileServer.serve( request, response, function( err, result ) {
-
-                if( err ) {
-
-                    console.log( "Error on " + request.url + " - " + err.message );
-
-                    response.writeHead( err.status, err.headers );
-
-                    response.end();
-
-                }
-
-            });
-
-        };
-
-        return function( request, response ) {
-
-            request.addListener( "end", function() {
-
-                serve( request, response );
-
-            }).resume();
-
-        }
-
-    },
+    init: function() { },
 
 
     //Set watch events
@@ -162,6 +122,15 @@ GUI.prototype = {
 
         });
 
+    },
+
+
+    //Login
+
+    setAuthentication: function() {
+
+
+
     }
 
 };
@@ -170,9 +139,13 @@ GUI.prototype = {
 //Defaults
 
 GUI.Defaults = {
-    port: 4200,
-    location: Path.resolve( __dirname, "../../", "www" ) + "/",
-    verbose: true
+
+    gui: {
+
+        password: false
+
+    }
+
 };
 
 module.exports = GUI;

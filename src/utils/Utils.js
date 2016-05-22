@@ -81,7 +81,7 @@ var Utils = {
     fileExists: function( path ) {
         try {
 
-            return fs.statSync( path ).isFile();
+            return FS.statSync( path ).isFile();
 
         } catch( e ) {
 

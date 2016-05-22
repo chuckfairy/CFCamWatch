@@ -11,6 +11,7 @@
     "crack"
   ],
   "dependencies": {
+      "cfcompile": "*",
       "async": "*",
       "node-static": "*",
       "socket.io": "*",
