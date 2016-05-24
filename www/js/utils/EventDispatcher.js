@@ -3,18 +3,18 @@
  * Used primarily as an inheritance via apply
  *
  */
-EventDispatcher = function() {};
+CF.EventDispatcher = function() {};
 
-EventDispatcher.prototype = {
+CF.EventDispatcher.prototype = {
 
 	constructor: EventDispatcher,
 
 	apply: function ( object ) {
 
-		object.on = EventDispatcher.prototype.on;
-		object.hasListener = EventDispatcher.prototype.hasListener;
-		object.removeListener = EventDispatcher.prototype.removeListener;
-		object.dispatch = EventDispatcher.prototype.dispatch;
+		object.on = CF.EventDispatcher.prototype.on;
+		object.hasListener = CF.EventDispatcher.prototype.hasListener;
+		object.removeListener = CF.EventDispatcher.prototype.removeListener;
+		object.dispatch = CF.EventDispatcher.prototype.dispatch;
 
         return object;
 
@@ -108,5 +108,3 @@ EventDispatcher.prototype = {
 	}
 
 };
-
-module.exports = EventDispatcher;

@@ -36,11 +36,7 @@ CF.Watch.Connection.prototype = {
 
         scope.socket.on( "infO", scope.setInfo.bind( scope ) );
 
-        scope.socket.on( "message-error", scope.createDisplay( "error" ) );
-
-        scope.socket.on( "message", scope.createDisplay( "message" ) );
-
-        scope.socket.on( "success", scope.createDisplay( "success" ) );
+        scope.socket.on( "login-success", scope.setLogin.bind( scope ) );
 
     },
 
@@ -65,7 +61,7 @@ CF.Watch.Connection.prototype = {
 
     },
 
-    on: function( type, callback ) {
+    response: function( type, callback ) {
 
         this.socket.on( type, callback );
 
@@ -76,6 +72,26 @@ CF.Watch.Connection.prototype = {
 
     setInfo: function( data ) {
 
+        var scope = this;
+
+        if( !! data.logged ) {
+
+            scope.setLogin();
+
+        }
+
+        scope.dispatch({ type: "get-info" });
+
+    },
+
+
+    //Login success and go
+
+    setLogin: function() {
+
+        var scope = this;
+
+        scope.loggedIn = true;
 
     },
 
@@ -84,7 +100,12 @@ CF.Watch.Connection.prototype = {
 
     login: function( pass ) {
 
+        var scope = this;
+
+        scope.socket.emit( "login", { pass: pass } );
 
     }
 
 };
+
+CF.EventDispatcher.prototype.apply( CF.Connection.prototype );

@@ -25,6 +25,12 @@ function API( GUI, server, pass ) {
 
     scope.sockets = [];
 
+    if( !! pass ) {
+
+        scope.authentication = pass;
+
+    }
+
     scope.init();
 
 }
@@ -37,9 +43,9 @@ API.prototype = {
 
     io: null,
 
-    socket: null,
-
     sockets: [],
+
+    authentication: false,
 
     opts: {},
 
@@ -71,7 +77,55 @@ API.prototype = {
 
         var scope = this;
 
-        scope.sockets.push( socket );
+        socket.authenicated = false;
+
+
+        //Auto login if no pass
+
+        if( ! scope.authenication ) {
+
+            scope.loginSocket( socket );
+
+        }
+
+
+        //Set info login
+
+        socket.emit( "info", { logged: ! scope.authentication } );
+
+
+        //Disconnect socket
+
+        socket.on( "disconnect", function() {
+
+            if( socket.authenticated ) {
+
+                var i = scope.sockets.indexOf( socket );
+                scope.sockets.splice( i, 1 );
+
+            }
+
+        });
+
+
+        //Login action
+
+        socket.on( "login", function( data ) {
+
+            data.pass = data.pass || "";
+
+            if( data.pass.trim() === scope.authentication ) {
+
+                scope.loginSocket( socket );
+
+                socket.emit( "login-success", {} );
+
+            }
+
+        });
+
+
+        //Socket err
 
         socket.on( "error", function( data ) {
 
@@ -79,17 +133,18 @@ API.prototype = {
 
         });
 
-        socket.on( "start-update", function( data ) {
+    },
 
-            console.log( data );
 
-        });
+    //Socket login
 
-        socket.on( "get-info", function() {
+    loginSocket: function( socket ) {
 
-            scope.emit( "info", Info );
+        var scope = this;
 
-        });
+        scope.sockets.push( socket );
+
+        socket.authenicated = true;
 
     },
 
@@ -100,7 +155,15 @@ API.prototype = {
 
         var scope = this;
 
-        scope.io.emit( type, data );
+        var sl = scope.sockets.length;
+
+        for( var i = 0; i < sl; i ++ ) {
+
+            var socket = scope.sockets[ i ];
+
+            socket.emit( type, data );
+
+        }
 
     },
 

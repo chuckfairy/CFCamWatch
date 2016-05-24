@@ -40,7 +40,7 @@ function GUI( options ) {
 
     scope.HTTP = new HTTPResponse( scope.opts.http );
 
-    scope.API = new API( scope, scope.HTTP.server );
+    scope.API = new API( scope, scope.HTTP.server, scope.opts.gui.password );
 
     scope.Watcher = new Watcher( null, scope.opts.watcher );
 
@@ -99,6 +99,16 @@ GUI.prototype = {
 
         scope.Watcher.on( "update", scope.sendUpdate.bind( scope ) );
 
+        scope.API.on( "connect", function() {
+
+            if( scope.opts.gui.verbose ) {
+
+                console.log( "SOCKET CONNECTED" );
+
+            }
+
+        });
+
     },
 
 
@@ -122,15 +132,6 @@ GUI.prototype = {
 
         });
 
-    },
-
-
-    //Login
-
-    setAuthentication: function() {
-
-
-
     }
 
 };
@@ -142,7 +143,9 @@ GUI.Defaults = {
 
     gui: {
 
-        password: false
+        password: false,
+
+        verbose: true
 
     }
 

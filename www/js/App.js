@@ -34,13 +34,32 @@ CF.Watch.App.prototype = {
 
         var scope = this;
 
-        scope.Connection.on( "update", function( data ) {
+
+        //Main connection img update
+
+        scope.Connection.response( "update", function( data ) {
 
             console.log( "Cam update" );
 
             scope.UI.update( data.base64 );
 
         });
+
+
+        //Info set
+
+        scope.Connection.on( "get-info", function( data ) {
+
+            if( scope.Connection.loggedIn ) {
+
+                scope.UI;
+
+            }
+
+        });
+
+
+        //Main login form
 
     }
 

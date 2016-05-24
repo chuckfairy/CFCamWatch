@@ -8,9 +8,10 @@
 
     "compile": [
         "js/CFWatch.js",
+        "js/utils/EventDispatcher.js",
         "js/App.js",
         "js/UI.js",
-        "js/COnnection.js"
+        "js/Connection.js"
     ]
 
 }
