@@ -11,7 +11,8 @@
         "js/utils/EventDispatcher.js",
         "js/App.js",
         "js/UI.js",
-        "js/Connection.js"
+        "js/Connection.js",
+        "js/Main.js"
     ]
 
 }
