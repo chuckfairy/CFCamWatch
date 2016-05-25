@@ -82,7 +82,7 @@ API.prototype = {
 
         //Auto login if no pass
 
-        if( ! scope.authenication ) {
+        if( scope.authenication === false ) {
 
             scope.loginSocket( socket );
 
@@ -91,7 +91,7 @@ API.prototype = {
 
         //Set info login
 
-        socket.emit( "info", { logged: ! scope.authentication } );
+        socket.emit( "login-info", { logged: ! scope.authentication } );
 
 
         //Disconnect socket
@@ -111,6 +111,8 @@ API.prototype = {
         //Login action
 
         socket.on( "login", function( data ) {
+
+            console.log( data );
 
             data.pass = data.pass || "";
 

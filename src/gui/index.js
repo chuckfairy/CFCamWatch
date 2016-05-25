@@ -45,19 +45,9 @@ function GUI( options ) {
     scope.Watcher = new Watcher( null, scope.opts.watcher );
 
 
-
-    //scope.API.on( "connect", scope.setEvents.bind( scope ) );
+    //Main handlers
 
     scope.setEvents();
-
-
-    //Set authenticate
-
-    if( scope.opts.gui.password ) {
-
-        scope.setAuthenication();
-
-    }
 
 }
 

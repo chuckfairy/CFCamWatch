@@ -3,18 +3,18 @@
  * Used primarily as an inheritance via apply
  *
  */
-CF.EventDispatcher = function() {};
+CF.Watch.Dispatcher = function() {};
 
-CF.EventDispatcher.prototype = {
+CF.Watch.Dispatcher.prototype = {
 
-	constructor: EventDispatcher,
+	constructor: CF.Watch.Dispatcher,
 
 	apply: function ( object ) {
 
-		object.on = CF.EventDispatcher.prototype.on;
-		object.hasListener = CF.EventDispatcher.prototype.hasListener;
-		object.removeListener = CF.EventDispatcher.prototype.removeListener;
-		object.dispatch = CF.EventDispatcher.prototype.dispatch;
+		object.on = CF.Watch.Dispatcher.prototype.on;
+		object.hasListener = CF.Watch.Dispatcher.prototype.hasListener;
+		object.removeListener = CF.Watch.Dispatcher.prototype.removeListener;
+		object.dispatch = CF.Watch.Dispatcher.prototype.dispatch;
 
         return object;
 

@@ -35,6 +35,30 @@ CF.Watch.App.prototype = {
         var scope = this;
 
 
+        //Main connection events
+
+        scope.setConnectionEvents();
+
+
+        //Main login form
+
+        scope.setDomEvents();
+
+    },
+
+
+    //Connection events
+
+    setConnectionEvents: function() {
+
+        var scope = this;
+
+
+        //Connection login
+
+        scope.Connection.on( "login", scope.login.bind( scope ) );
+
+
         //Main connection img update
 
         scope.Connection.response( "update", function( data ) {
@@ -50,16 +74,39 @@ CF.Watch.App.prototype = {
 
         scope.Connection.on( "get-info", function( data ) {
 
-            if( scope.Connection.loggedIn ) {
-
-                scope.UI;
-
-            }
+            console.log( "GET INFO", data );
 
         });
 
+    },
 
-        //Main login form
+
+    //Dom Events main login
+
+    setDomEvents: function() {
+
+        var scope = this;
+
+        scope.UI.loginBtn.onclick = function() {
+
+            var pass = scope.UI.getPassword();
+
+            console.log( pass );
+
+            scope.Connection.login( pass );
+
+        };
+
+    },
+
+
+    //Login main
+
+    login: function() {
+
+        var scope = this;
+
+        scope.UI.hideLogin();
 
     }
 

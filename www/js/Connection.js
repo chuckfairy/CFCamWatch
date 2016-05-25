@@ -34,7 +34,7 @@ CF.Watch.Connection.prototype = {
 
         scope.socket = scope.io();
 
-        scope.socket.on( "infO", scope.setInfo.bind( scope ) );
+        scope.socket.on( "login-info", scope.setInfo.bind( scope ) );
 
         scope.socket.on( "login-success", scope.setLogin.bind( scope ) );
 
@@ -80,6 +80,8 @@ CF.Watch.Connection.prototype = {
 
         }
 
+        console.log( data );
+
         scope.dispatch({ type: "get-info" });
 
     },
@@ -92,6 +94,8 @@ CF.Watch.Connection.prototype = {
         var scope = this;
 
         scope.loggedIn = true;
+
+        scope.dispatch({ type: "login" });
 
     },
 
@@ -108,4 +112,4 @@ CF.Watch.Connection.prototype = {
 
 };
 
-CF.EventDispatcher.prototype.apply( CF.Connection.prototype );
+CF.Watch.Dispatcher.prototype.apply( CF.Watch.Connection.prototype );
