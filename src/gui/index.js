@@ -111,7 +111,7 @@ GUI.prototype = {
             if( err ) { throw err; }
 
             var baseImage = "data:image/"
-                + scope.Watcher.FSWebcam.opts.output
+                + scope.Watcher.Camera.opts.output
                 + ";base64,"
                 + new Buffer( data ).toString( "base64" );
 

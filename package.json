@@ -12,6 +12,7 @@
   ],
   "dependencies": {
       "cfcompile": "*",
+      "node-webcam": "*",
       "async": "*",
       "node-static": "*",
       "socket.io": "*",

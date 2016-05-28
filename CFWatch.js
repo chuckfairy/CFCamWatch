@@ -8,8 +8,6 @@
 
 module.exports = {
 
-    FSWebcam: require( __dirname + "/src/FSWebcam.js" ),
-
     Watcher: require( __dirname + "/src/Watcher.js" ),
 
     Info: require( __dirname + "/src/Info.js" ),

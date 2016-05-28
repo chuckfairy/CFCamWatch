@@ -1,53 +1,53 @@
 <!DOCTYPE html>
 <html>
 
-<head>
+    <head>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
-    <title>CFWatch</title>
+        <title>CFWatch</title>
 
-    <link rel="stylesheet" href="plugin/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/app.css">
+        <link rel="stylesheet" href="plugin/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/app.css">
 
-</head>
+    </head>
 
-<body>
+    <body>
 
-    <div class="fullscreen">
+        <div class="fullscreen">
 
-        <div id="app">
+            <div id="app">
 
-            <div id="img"></div>
+                <div id="img"></div>
+
+            </div>
 
         </div>
 
-    </div>
 
+        <div id="login-screen" class="fullscreen">
 
-    <div id="login-screen" class="fullscreen">
+            <div id="login" class="form-group">
 
-        <div id="login" class="form-group">
+                <div class="input-group">
 
-            <div class="input-group">
+                    <input id="password" type="password" class="form-control" placeholder="password">
 
-                <input id="password" type="password" class="form-control" placeholder="password">
+                    <div class="input-group-addon">
+                        <a id="passsword-submit">Login</button>
+                    </div>
 
-                <div class="input-group-addon">
-                    <a id="passsword-submit">Login</button>
                 </div>
 
             </div>
 
         </div>
 
-    </div>
+        <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 
-    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+        <script type="text/javascript" src="/build/cfwatch.min.js"></script>
 
-    <script type="text/javascript" src="/build/cfwatch.min.js"></script>
-
-</body>
+    </body>
 
 </html>

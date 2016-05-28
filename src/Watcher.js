@@ -12,13 +12,13 @@ var Path = require( "path" );
 
 var FS = require( "fs" );
 
+var NodeWebcam = require( "node-webcam" );
+
 var NodeZip = require( "node-zip" );
 
 var Moment = require( "moment" );
 
 var JSFtp = require( "jsftp" );
-
-var FSWebcam = require( __dirname + "/FSWebcam.js" );
 
 var Utils = require( __dirname + "/utils/Utils.js" );
 
@@ -31,9 +31,9 @@ function Watcher( Cam, opts ) {
 
     var scope = this;
 
-    scope.FSWebcam = Cam ? Cam : new FSWebcam();
-
     scope.opts = Utils.setDefaults( opts, Watcher.Defaults );
+
+    scope.Camera = Cam ? Cam : NodeWebcam.create( scope.opts.webcam );
 
     scope.watches = [];
 
@@ -80,7 +80,7 @@ Watcher.prototype = {
 
     //Webcam class
 
-    FSWebcam: null,
+    Camera: null,
 
 
     //Update times
@@ -116,7 +116,7 @@ Watcher.prototype = {
 
         scope.lastLocation = location;
 
-        scope.FSWebcam.capture( location, function( fileLocale ) {
+        scope.Camera.capture( location, function( fileLocale ) {
 
             var location = fileLocale;
 
@@ -389,6 +389,8 @@ Watcher.Defaults = {
     dir: Path.resolve( __dirname, "..", "cache" ) + "/",
 
     zipDir: false,
+
+    webcam: {},
 
     ftp: {
         enabled: false,
