@@ -30,6 +30,12 @@ a {
     width: 100%;
 }
 
+.img-fullscreen {
+    display: block;
+    width: 100%;
+    margin: 0 auto;
+}
+
 
 /* Login */
 

@@ -42,7 +42,7 @@ function GUI( options ) {
 
     scope.API = new API( scope, scope.HTTP.server, scope.opts.gui.password );
 
-    scope.Watcher = new Watcher( null, scope.opts.watcher );
+    scope.Watcher = new Watcher( scope.opts.watcher );
 
 
     //Main handlers
@@ -102,21 +102,22 @@ GUI.prototype = {
     },
 
 
-    sendUpdate: function( data ) {
+    sendUpdate: function( cameraData ) {
 
         var scope = this;
 
-        FS.readFile( data.file, function( err, data ) {
+        FS.readFile( cameraData.file, function( err, data ) {
 
             if( err ) { throw err; }
 
             var baseImage = "data:image/"
-                + scope.Watcher.Camera.opts.output
+                + cameraData.Camera.opts.output
                 + ";base64,"
                 + new Buffer( data ).toString( "base64" );
 
             scope.API.emitAll( "update", {
                 file: data.file,
+                num: cameraData.num,
                 base64: baseImage
             });
 

@@ -82,7 +82,10 @@ CF.Watch.Connection.prototype = {
 
         console.log( data );
 
-        scope.dispatch({ type: "get-info" });
+        scope.dispatch({
+            type: "get-info",
+            data: data
+        });
 
     },
 

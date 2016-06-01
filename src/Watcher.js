@@ -27,26 +27,17 @@ var EventDispatcher = require( __dirname + "/utils/EventDispatcher.js" );
 
 //Main Class
 
-function Watcher( Cam, opts ) {
+function Watcher( opts ) {
 
     var scope = this;
 
     scope.opts = Utils.setDefaults( opts, Watcher.Defaults );
 
-    scope.Camera = Cam ? Cam : NodeWebcam.create( scope.opts.webcam );
+    scope.setCameras();
 
     scope.watches = [];
 
     scope.archives = [];
-
-
-    //Auto start watching
-
-    if( scope.opts.autoStart ) {
-
-        scope.update();
-
-    }
 
 
     //Auto delete set after process quit
@@ -66,6 +57,15 @@ function Watcher( Cam, opts ) {
 
     }
 
+
+    //Auto start watching
+
+    if( scope.opts.autoStart ) {
+
+        scope.update();
+
+    }
+
 }
 
 Watcher.prototype = {
@@ -80,7 +80,7 @@ Watcher.prototype = {
 
     //Webcam class
 
-    Camera: null,
+    Cameras: null,
 
 
     //Update times
@@ -110,26 +110,51 @@ Watcher.prototype = {
 
         var scope = this;
 
-        var location = scope.opts.dir
-            + scope.opts.name
-            + Date.now();
 
-        scope.lastLocation = location;
+        //Main udpate per camera
 
-        scope.Camera.capture( location, function( fileLocale ) {
+        var index = 0;
 
-            var location = fileLocale;
+        function updateCamera( Camera, callback ) {
 
-            scope.lastUpdateTime = Date.now();
+            var update = updateCamera.bind( scope, Camera, index );
 
-            scope.watches.push( location );
+            var location = scope.opts.dir
+                + scope.opts.name
+                + "camera" + index
+                + "_" + Date.now();
 
-            scope.dispatch({
-                type: "update",
-                file: location
+            scope.lastLocation = location;
+
+            Camera.capture( location, function( fileLocale ) {
+
+                console.log( "FILE SAVED " + fileLocale );
+
+                scope.lastUpdateTime = Date.now();
+
+                scope.watches.push( fileLocale );
+
+                scope.dispatch({
+                    type: "update",
+                    Camera: Camera,
+                    num: index,
+                    file: fileLocale
+                });
+
+                scope.checkWatches();
+
+                index++;
+
+                callback();
+
             });
 
-            scope.checkWatches();
+        }
+
+
+        //Loop
+
+        Async.mapSeries( scope.Cameras, updateCamera, function() {
 
             if( ! scope.opts.autoUpdate ) { return; }
 
@@ -144,6 +169,49 @@ Watcher.prototype = {
             }
 
         });
+
+    },
+
+
+    //Set cameras
+
+    setCameras: function() {
+
+        var scope = this;
+
+        var devices = scope.opts.devices;
+
+        scope.Cameras = [];
+
+        function createCamera( device ) {
+
+            var opts = { device: device };
+
+            opts = Utils.setDefaults( opts, scope.opts.webcam );
+
+            return NodeWebcam.create( opts );
+
+        }
+
+        if( devices ) {
+
+            var dl = devices.length;
+
+            for( var i = 0; i < dl; i ++ ) {
+
+                var Camera = createCamera( devices[ i ] );
+
+                scope.Cameras.push( Camera );
+
+            }
+
+        } else {
+
+            var Camera = NodeWebcam.create( scope.opts.webcam );
+
+            scope.Cameras.push( Camera );
+
+        }
 
     },
 

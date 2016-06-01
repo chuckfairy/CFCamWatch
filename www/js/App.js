@@ -12,6 +12,10 @@ CF.Watch.App = function( options ) {
 
     scope.UI = new CF.Watch.UI();
 
+    scope.images = [];
+
+    scope.cameras = [];
+
     scope.init();
 
 };
@@ -26,6 +30,11 @@ CF.Watch.App.prototype = {
     Connection: null,
 
     UI: null,
+
+
+    //Mem
+
+    images: [],
 
 
     //Main init
@@ -65,7 +74,13 @@ CF.Watch.App.prototype = {
 
             console.log( "Cam update" );
 
-            scope.UI.update( data.base64 );
+            var camNum = data.num|0;
+
+            console.log( "CAM NUM", camNum );
+
+            scope.images.push( data.base64 );
+
+            scope.UI.update( camNum, data.base64 );
 
         });
 
@@ -75,6 +90,8 @@ CF.Watch.App.prototype = {
         scope.Connection.on( "get-info", function( data ) {
 
             console.log( "GET INFO", data );
+
+            scope.UI.setCameraViews( data.data.num );
 
         });
 

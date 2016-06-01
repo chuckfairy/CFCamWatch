@@ -91,7 +91,10 @@ API.prototype = {
 
         //Set info login
 
-        socket.emit( "login-info", { logged: ! scope.authentication } );
+        socket.emit( "login-info", {
+            logged: ! scope.authentication,
+            num: scope.gui.Watcher.Cameras.length
+        } );
 
 
         //Disconnect socket
