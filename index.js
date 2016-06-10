@@ -1,3 +1,3 @@
 //index uses cfcamwatch
 
-module.exports = require( "CFCamWatch.js" );
+module.exports = require( __dirname + "/CFWatch.js" );

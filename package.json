@@ -2,7 +2,7 @@
   "name": "cfcrack",
   "version": "0.0.1",
   "description": "cf webcam security",
-  "main": "index.js",
+  "main": "nw.js",
   "bin": "./bin/cfcamwatch.js",
   "scripts": {
     "test": "test.js"
