@@ -59,21 +59,27 @@ CF.Watch.UI.prototype = {
 
         var scope = this;
 
+        var WINDOW_HEIGHT = window.innerHeight;
+
         function createRow() {
 
             var div = document.createElement( "div" );
 
             div.className = "row";
 
+            div.style.height = ( WINDOW_HEIGHT / ( num / 2 ) ) + "px";
+
             return div;
 
         }
 
-        function createSegment( colSize ) {
+        function createSegment( colSize, height ) {
 
             var div = document.createElement( "div" );
 
-            div.className = "col-xs-" + colSize;
+            div.className = "col-xs-" + colSize + " col-flex";
+
+            div.style.height = height;
 
             return div;
 
@@ -99,11 +105,11 @@ CF.Watch.UI.prototype = {
 
                 if( ! ( i % 2 ) || ! row ) {
 
-                    row = createRow();
+                    row = createRow( num );
 
                 }
 
-                var seg = createSegment( 6 );
+                var seg = createSegment( 6, row.style.height );
 
                 var area = createArea();
 

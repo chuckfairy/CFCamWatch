@@ -18,10 +18,13 @@ a {
 }
 
 #img {
+    height: 100vh;
+}
+
+#img, .col-flex {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: 100vh;
     position: relative;
 }
 
