@@ -110,8 +110,12 @@ GUI.prototype = {
 
             if( err ) { throw err; }
 
+            var output = cameraData.Camera.opts.output === "bmp"
+                ? "png"
+                : cameraData.Camera.opts.output;
+
             var baseImage = "data:image/"
-                + cameraData.Camera.opts.output
+                + output
                 + ";base64,"
                 + new Buffer( data ).toString( "base64" );
 

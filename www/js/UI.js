@@ -95,7 +95,7 @@ CF.Watch.UI.prototype = {
 
         }
 
-        if( num > 0 ) {
+        if( num > 2 ) {
 
             var lastRow = null;
 
